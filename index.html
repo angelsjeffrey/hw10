@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather API</title>
+<meta charset="utf-8"/>
+<style type="text/css">
+	body {
+		text-align: center;
+	}
+</style>
+<script>
+ 		function get_argument() {
+ 			var obj = document.getElementById("character");
+ 			alert(obj.options[obj.selectedIndex].text);
+			document.getElementById("data").innerHTML = obj.options[obj.selectedIndex].text;	
+ 		}
+
+		function find_height() {
+			/* Step 1: Make instance of request object...
+			...to make HTTP request after page is loaded*/
+			request = new XMLHttpRequest();
+			console.log("1 - request object created");
+ 
+			// Step 2: Set the URL for the AJAX request to be the JSON file
+
+ 			var Character_id = document.getElementById("character").value;
+ 			var url = "https://swapi.co/api/people/" + Character_id;
+			request.open("GET", url, true);
+
+			console.log("2 - opened request file");
+ 
+			// Step 3: set up event handler/callback
+
+			request.onreadystatechange = function() {
+				console.log("3 - readystatechange event fired.");
+ 
+				if (request.readyState == 4 && request.status == 200) {
+
+					// Step 5: wait for done + success
+
+					result = request.responseText;
+					person = JSON.parse(result);
+					
+					document.getElementById("data").innerHTML = "Character's height is: " + person["height"] + "cm"; 	
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+
+					document.getElementById("data").innerHTML = "Something is wrong!  Check the logs to see where this went off the rails";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Too soon!  Try again";
+
+				}
+
+			}
+		// Step 4: fire off the HTTP request
+			request.send();
+			console.log("4 - Request sent");
+		}
+	</script>
+</head>
+
+<body>
+	<h1>Star Wars Character Heights</h1>
+	<form>
+		<select id = "character">
+			<option value="1"> Luke Skywalker </option>
+			<option value="2"> C-3PO </option>
+			<option value="3"> R2-D2 </option>
+			<option value="4"> Darth Vader </option>
+		</select>
+		<br><br>
+  		<input type="button" onclick= "find_height()" value="Submit">
+	</form>
+	<br>
+	<h2><div id="data">Loading...</div></h2>
+
+	<br><br><br>
+	<p> I chose to use the "SWAPI" (Star Wars API). This API allows access to data on all things Star Wars, including characters, planets, and more. I found this API through its own website, https://swapi.co/. In my website I only used the height option within the characters array. This API may be useful for a Star Wars fan site that wishes to provide pertient information, or on a Star Wars toys site which can use the information provided by the API to advertise all the special attributes that each toy has. </p>
+</body>
+
+
+</html>
